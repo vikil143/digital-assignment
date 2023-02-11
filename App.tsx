@@ -1,5 +1,7 @@
+// import MainStackNavigator from '@myapp/routes/MainStackNavigator';
 import MainStackNavigator from '@myapp/routes/MainStackNavigator';
 import { StyleSheet, View } from 'react-native';
+import React from "react"
 
 export default function App() {
   return (
