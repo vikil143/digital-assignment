@@ -2,6 +2,9 @@ import { StyleSheet, Text, View, Button, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import { LoginProps } from './types'
 import Spacing from '@myapp/components/Spacing'
+import { useToast } from '@myapp/hooks/useToast'
+import makeApiRequest from '@myapp/services/makeApiRequest'
+import { endPoints } from '@myapp/services/endPoints'
 
 export default function Login({ navigation }: LoginProps) {
     const [state, setState] = useState({
@@ -10,10 +13,48 @@ export default function Login({ navigation }: LoginProps) {
     })
 
     const [passwordSecure, setPasswordSecure] = useState(false);
+    const showToast = useToast();
 
 
+    const handleValidate = () => {
+        let isValide = true;
 
-    const onSubmit = () => navigation.navigate("List");
+        if(state.email === ""){
+            showToast("Please enter email", "danger")
+            return false
+        }
+
+        if(state.password === ""){
+            showToast("Please enter password", "danger");
+            return false
+        }
+
+        
+        return isValide
+    }
+
+    const onSubmit = async () => {
+        const isValide = handleValidate();
+
+        if(isValide){
+
+            try {
+                const jsonData = {
+                    usr: state.email,
+                    pwd: state.password,
+                }
+
+                const response = await makeApiRequest("POST", endPoints.login, jsonData)
+
+                console.log("resp", response.data)
+
+                navigation.navigate("List")
+            } catch (error) {
+                showToast(error?.message as string, "danger")
+            }
+
+        }
+    };
 
     const onChangeText = (name: string, value: string) => setState({ ...state, [name]: value })
 

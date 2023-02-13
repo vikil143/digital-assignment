@@ -7,3 +7,7 @@ export interface ListProps extends MainStackNavigator { }
 
 
 export interface UserProps extends MainStackNavigator { }
+
+export type Data = {
+    name: string;
+}
